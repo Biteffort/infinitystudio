@@ -1,11 +1,17 @@
+import 'dart:js';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:infinitystudio/Builder/builder.dart';
+import 'dart:js' as js;
+
+import 'package:infinitystudio/main.dart';
 
 class LoginPage extends StatelessWidget{
 
   bool ischecked = true;
 
-  List<Widget> pageChildren(double width){
+  List<Widget> pageChildren(double width, BuildContext context){
 
     return <Widget>[
       Image.asset("assets/images/two.png",width: width,),
@@ -98,7 +104,7 @@ class LoginPage extends StatelessWidget{
               ),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 20.0),
+              padding: const EdgeInsets.symmetric(vertical: 0.0),
               child: Row(
                 children: <Widget>[
                   MaterialButton(
@@ -109,7 +115,17 @@ class LoginPage extends StatelessWidget{
                     ),
                     onPressed: (){
 
-                    },
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => WebViewExample()),
+                      );
+
+
+
+                    //  js.context.callMethod('alertMessage', ['Please Enter All Values']);
+                      /*var state = js.JsObject.fromBrowserObject(js.context['state']);
+                      print(state['hello']);*/
+                      },
                     child:
                     Text("Login Now",
                       style: TextStyle(color: Colors.red,fontSize: 16),
@@ -139,11 +155,11 @@ class LoginPage extends StatelessWidget{
         if(constraints.maxWidth>800){
           return Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: pageChildren(constraints.biggest.width/2),
+            children: pageChildren(constraints.biggest.width/2,context),
           );
         }else{
           return Column(
-            children: pageChildren(constraints.biggest.width),
+            children: pageChildren(constraints.biggest.width,context),
           );
         }
       },
