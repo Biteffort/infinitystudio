@@ -1,30 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:infinitystudio/LandingPage/LanadingPage.dart';
+import 'package:infinitystudio/LandingPage/NavBarLogin.dart';
+import 'package:infinitystudio/LoginPage/LoginPage.dart';
 import 'package:infinitystudio/NavigationBar/NavBar.dart';
 
 
 void main() {
-  runApp(HomePage());
+  runApp(LoginMain());
 }
 
-class HomePage extends StatelessWidget{
+class LoginMain extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
     return MaterialApp(
-      title: "Infinity",
+      title: "InfinityStudio",
       theme: ThemeData(
         primarySwatch: Colors.blue,
         fontFamily: "Sourcesans"
       ),
-      home: new MyHomePage(),
+      home: new MyLoginMain(),
     );
   }
 
 }
 
 
-class MyHomePage extends StatelessWidget{
+class MyLoginMain extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -40,10 +42,10 @@ class MyHomePage extends StatelessWidget{
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              NavigationBar(),
+              NavigationBarLogin(),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 50.0),
-                child: LandingPage(),
+                child: LoginPage(),
               ),
             ],
           ),

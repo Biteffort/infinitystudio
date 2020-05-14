@@ -1,10 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:infinitystudio/LandingPage/LoginMain.dart';
 import 'package:infinitystudio/main.dart';
 import 'package:infinitystudio/LoginPage/LoginPage.dart';
 
-class NavigationBar extends StatelessWidget{
+class NavigationBarLogin extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
@@ -37,45 +36,6 @@ class DesktopNavBar extends StatelessWidget{
           children: <Widget>[
             Text("Infinity Studio",style: TextStyle(
                 fontWeight: FontWeight.bold,color: Colors.white,fontSize: 50),
-            ),
-            Row(
-              children: <Widget>[
-                Text("Home",
-                  style: TextStyle(color: Colors.white,fontSize: 16),
-                ),
-                SizedBox(
-                  width: 30,
-                ),
-                Text("About US",
-                  style: TextStyle(color: Colors.white,fontSize: 16),
-                ),
-                SizedBox(
-                  width: 30,
-                ),
-                Text("Portfolio",
-                  style: TextStyle(color: Colors.white,fontSize: 16),
-                ),
-                SizedBox(
-                  width: 30,
-                ),
-                MaterialButton(
-                  color: Colors.pink,
-                  padding: const EdgeInsets.only(right: 20.0,left: 20.0),
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(20))
-                  ),
-                  onPressed: (){
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => LoginMain()),
-                    );
-                  },
-                  child:
-                  Text("Get Started",
-                    style: TextStyle(color: Colors.white,fontSize: 16),
-                  ),
-                ),
-              ],
             ),
           ],
         ),

@@ -48,7 +48,6 @@ flutter:
     - assets/images/logo_one.png
     - assets/images/one.png
     - assets/images/two.png
-    - assets/images/three.png
   fonts:
   - family: Sourcesans
     fonts:
