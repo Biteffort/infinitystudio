@@ -22,13 +22,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.4.1"
-  auth_header:
-    dependency: transitive
-    description:
-      name: auth_header
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.4"
   boolean_selector:
     dependency: transitive
     description:
@@ -64,6 +57,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.4"
+  csslib:
+    dependency: transitive
+    description:
+      name: csslib
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.16.1"
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -81,13 +81,18 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  http_server:
+  flutter_web_plugins:
+    dependency: transitive
+    description: flutter
+    source: sdk
+    version: "0.0.0"
+  html:
     dependency: transitive
     description:
-      name: http_server
+      name: html
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.9.8+3"
+    version: "0.14.0+3"
   image:
     dependency: transitive
     description:
@@ -95,41 +100,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.12"
-  jaguar:
+  import_js_library:
     dependency: "direct main"
     description:
-      name: jaguar
+      name: import_js_library
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.4.36"
-  jaguar_common:
-    dependency: transitive
-    description:
-      name: jaguar_common
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.4"
-  jaguar_flutter_asset:
+    version: "1.0.1"
+  js:
     dependency: "direct main"
     description:
-      name: jaguar_flutter_asset
+      name: js
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.2.0"
-  jaguar_serializer:
-    dependency: transitive
-    description:
-      name: jaguar_serializer
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.2.12"
-  logging:
-    dependency: transitive
-    description:
-      name: logging
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.11.4"
+    version: "0.6.1+1"
   matcher:
     dependency: transitive
     description:
@@ -144,13 +128,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.1.8"
-  mime:
-    dependency: transitive
-    description:
-      name: mime
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.9.6+3"
   path:
     dependency: transitive
     description:
@@ -158,13 +135,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.6.4"
-  path_tree:
-    dependency: transitive
-    description:
-      name: path_tree
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.2.2"
   petitparser:
     dependency: transitive
     description:
@@ -240,13 +210,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.8"
-  webview_flutter:
-    dependency: "direct main"
-    description:
-      name: webview_flutter
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.3.21"
   xml:
     dependency: transitive
     description:
@@ -256,4 +219,4 @@ packages:
     version: "3.6.1"
 sdks:
   dart: ">=2.7.0 <3.0.0"
-  flutter: ">=1.12.13+hotfix.5"
+  flutter: ">=1.10.0"

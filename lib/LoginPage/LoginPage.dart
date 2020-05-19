@@ -1,10 +1,9 @@
-import 'dart:js';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:infinitystudio/Builder/builder.dart';
+import 'package:infinitystudio/Builder/creator.dart';
 import 'dart:js' as js;
-
+import 'dart:html' as html;
 import 'package:infinitystudio/main.dart';
 
 class LoginPage extends StatelessWidget{
@@ -117,12 +116,15 @@ class LoginPage extends StatelessWidget{
 
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => WebViewExample()),
+                        MaterialPageRoute(builder: (context) => CreatorPage()),
                       );
 
 
+                      //html.window.open('https://youtube.com', 'youtube');
 
-                    //  js.context.callMethod('alertMessage', ['Please Enter All Values']);
+                   //  js.context.callMethod('alertMessage', ['Please Enter All Values']);
+
+                    // js.context.callMethod('EventDispatcher');
                       /*var state = js.JsObject.fromBrowserObject(js.context['state']);
                       print(state['hello']);*/
                       },
@@ -165,5 +167,7 @@ class LoginPage extends StatelessWidget{
       },
     );
   }
+
+
 
 }
