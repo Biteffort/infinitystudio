@@ -43,7 +43,7 @@ class DesktopNavBar extends StatelessWidget{
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Container(
-              margin: EdgeInsets.only(left: 40.0),
+              margin: EdgeInsets.only(left: 130.0),
               child: Row(
                 children: <Widget>[
                   Text("Infinity Studio",style: TextStyle(

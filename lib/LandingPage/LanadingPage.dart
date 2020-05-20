@@ -38,6 +38,7 @@ class LandingPage extends StatelessWidget{
         ),
       ),
       Image.asset("assets/images/one.png",width: width,),
+      
     ];
   }
 
