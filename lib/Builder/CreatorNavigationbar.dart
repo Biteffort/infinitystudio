@@ -51,7 +51,70 @@ class DesktopNavBar extends StatelessWidget{
                   ),
                 ],
               ),
-            )
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                GestureDetector(
+                    child: Container(
+                      margin: EdgeInsets.only(top: 10.0),
+                      alignment: Alignment.center,
+                      child: Column(
+                        children: <Widget>[
+                          MaterialButton(
+                            height: 32.0,
+                            color: Colors.white,
+                            padding: const EdgeInsets.only(right: 30.0,left: 30.0),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(20))
+                            ),
+                            onPressed: (){
+
+                            },
+                            child:
+                            Text("I Frame",
+                              style: TextStyle(color: Colors.red,fontSize: 16),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    onTap:(){
+
+                    }
+                ),
+                SizedBox(width: 20),
+                GestureDetector(
+                    child: Container(
+                      margin: EdgeInsets.only(top: 10.0),
+                      alignment: Alignment.center,
+                      child: Column(
+                        children: <Widget>[
+                          MaterialButton(
+                            height: 32.0,
+                            color: Colors.white,
+                            padding: const EdgeInsets.only(right: 30.0,left: 30.0),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(20))
+                            ),
+                            onPressed: (){
+
+                            },
+                            child:
+                            Text("Publish",
+                              style: TextStyle(color: Colors.red,fontSize: 16),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    onTap:(){
+
+                    }
+                ),
+                SizedBox(width: 20,),
+              ],
+            ),
           ],
         ),
       ),

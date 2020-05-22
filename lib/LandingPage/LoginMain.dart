@@ -15,6 +15,7 @@ class LoginMain extends StatelessWidget{
     // TODO: implement build
     return MaterialApp(
       title: "InfinityStudio",
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
         fontFamily: "Sourcesans"

@@ -1,0 +1,294 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>Threejs Tutorial</title>
+	 <link type="text/css" rel="stylesheet" href="main.css">
+    <style>
+        body {margin:0;};
+        canvas {width:100%;height:100%}
+
+		body {
+			overflow: hidden;
+		}
+		.ui {
+			position: absolute;
+		}
+		.wrapper {
+			text-align: center;
+			display: inline-block;
+			position: absolute; 
+			right: 30%;
+		  
+		}
+
+		button{
+			margin: 20px;
+		}
+
+		#canvas-container {
+			background-color: #FF4136;
+			width: 1200px;
+			height: 700px;
+			position: absolute;
+			left: 50%;
+			top: 60%;
+			transform: translate(-50%, -50%);
+		}
+
+    </style>
+
+</head>
+<body>
+    <script src="js/three.js"></script>
+    <script src="js/OrbitControls.js"></script>
+    <script src="js/GLTFLoader.js"></script>
+    <script src="js/TransformControls.js"></script>
+	<script src="js/GLTFExporter.js"></script>
+
+	<div id="canvas-container">
+	<button style="center:0" id="Reset" class="ui">Reset</button>
+	<div class="wrapper">
+	<button style="center:0" id="W" class="w">W</button>
+	<button style="center:0" id="E" class="e">E</button>
+	<button style="center:0" id="R" class="r">R</button>
+	<input type="file" id="glb" name="glb" accept="glb/*">
+	<button type="button" id="demo" onclick="Go()">Go</button>
+	<button type="button" id="demo" onclick="Export()">Export</button>
+	</div>
+	</div>
+    <script>
+
+			var model = [];
+			var modelIndex= 0;
+			var scene = new THREE.Scene();
+			var camera = new THREE.PerspectiveCamera( 45, window.innerWidth / window.innerHeight, 0.1, 1000 );
+			camera.position.z = 25;
+			camera.position.y = 10;
+			camera.rotation.x = -26;
+			var objects = [];
+			
+		
+
+			raycaster = new THREE.Raycaster();
+			mouse = new THREE.Vector2();
+
+			var bgColor = new THREE.Color("rgb(241,241,241)");
+			var renderer = new THREE.WebGLRenderer({antialias: true});
+			renderer.setClearColor (bgColor, 1);
+			renderer.domElement.addEventListener( 'click', onClick, false );
+			//renderer.setSize( window.innerWidth, window.innerHeight );
+			//document.body.appendChild( renderer.domElement );
+			var container = document.getElementById('canvas-container');
+			var w = container.offsetWidth;
+			var h = container.offsetHeight;
+			renderer.setSize(w, h);
+			container.appendChild(renderer.domElement);
+        
+			window.addEventListener('resize',function(){
+			var width = window.innerWidth;
+			var height = window.innerHeight;
+			renderer.setSize(width,height);
+			camera.aspect = width/height;
+			camera.updateProjectionMatrix();
+			});
+
+		//Add light
+        var light = new THREE.AmbientLight(0xffffff, 0.8 );
+        scene.add( light );
+
+		// Add Grid helper here ....
+		var color1 = new THREE.Color( color1 !== undefined ? color1 : 0x444444 );
+		var color2 = new THREE.Color( color2 !== undefined ? color2 : 0x888888 );
+        var size = 25;
+        var divisions = 50;
+        var gridHelper = new THREE.GridHelper( size, divisions,color1,color2);
+        scene.add( gridHelper );
+
+		// Declare mouse Orbitcontrol
+        var controls = new THREE.OrbitControls( camera, renderer.domElement );
+		controls.screenSpacePanning = true;
+		controls.enablePan = false;
+		controls.update();
+        
+		// Declare Transform control
+        var transformControls = new THREE.TransformControls(camera, renderer.domElement);
+		
+		
+
+		transformControls.addEventListener('mouseDown', function () {
+        controls.enabled = false;
+        });
+        transformControls.addEventListener('mouseUp', function () {
+        controls.enabled = true;
+        });
+     
+
+        // Add Glb here
+		/*const selectedFile = document.getElementById('glb').value;
+		selectedFile.addEventListener("change", handleFiles, false);
+		function handleFiles() {
+		//const fileList = this.file; /* now you can work with the file list 
+		console.log(this.files[0].mozFullPath);
+		}*/
+		function Go() {
+		var x = document.getElementById("glb").value.replace('C:\\fakepath\\','');;
+		//document.getElementById("demo").innerHTML = x;
+		
+
+		var loader = new THREE.GLTFLoader();
+        loader.load( 'http://localhost:8080/3D%20Objects/ThreeJS_Tutorials/three.js-master/ThreejsTuto/Model/model.glb', function ( gltf ) {
+        //scene.add( gltf.scene );
+		
+		model[modelIndex] = gltf.scene;
+		model[modelIndex].scale.set(0.1, 0.1, 0.1);
+		scene.add(model[modelIndex]);
+		objects.push( model[modelIndex] );
+		transformControls.attach(model[modelIndex]);
+		scene.add(transformControls);
+
+        gltf.asset;
+		modelIndex++;
+        }, undefined, function ( error ) {
+        console.error( error );
+        } );
+
+		}
+
+       /* var loader = new THREE.GLTFLoader();
+        loader.load( 'http://localhost:8080/3D%20Objects/ThreeJS_Tutorials/three.js-master/ThreejsTuto/Model/model.glb', function ( gltf ) {
+        //scene.add( gltf.scene );
+		
+		model = gltf.scene;
+		model.scale.set(0.1, 0.1, 0.1);
+		scene.add(model);
+		
+		transformControls.attach(model);
+		scene.add(transformControls);
+        gltf.asset;
+        }, undefined, function ( error ) {
+        console.error( error );
+        } );*/
+
+		document.body.addEventListener('keydown', keyPressedDown, false);
+		document.body.addEventListener('keyup', keyPressedUp, false);
+		function keyPressedDown(e){
+		controls.enabled = false;
+		switch(e.key) {
+  			case 'w':
+    			transformControls.mode='translate';
+    		break;
+			case 'e':
+    			transformControls.mode='rotate';
+    		break;
+			case 'r':
+    			transformControls.mode='scale';
+    		break;
+			}
+		}
+
+		function keyPressedUp(e){
+		controls.enabled = true;
+		}
+		
+		// Reset button>
+
+		var resetButton = document.getElementById("Reset");
+		resetButton.addEventListener("click", OnClickReset, false);
+		
+		function OnClickReset(event) {
+		camera.position.set(0,5,10);
+		camera.rotation.set(-26, 0, 0);
+
+		model.position.set(0, 0, 0);
+		model.rotation.set(0, 0, 0);
+		model.scale.set(0.1, 0.1, 0.1);
+		controls.update();
+		}
+
+		var _translate = document.getElementById("W");
+		_translate.addEventListener("click", OnTranslate, false);
+		
+		function OnTranslate(event) {
+		transformControls.mode='translate';
+		}
+
+		var _rotate = document.getElementById("E");
+		_rotate.addEventListener("click", OnRotate, false);
+		
+		function OnRotate(event) {
+		transformControls.mode='rotate';
+		}
+
+		var _scale = document.getElementById("R");
+		_scale.addEventListener("click", OnScale, false);
+		
+		function OnScale(event) {
+		transformControls.mode='scale';
+		}
+
+		function Export() {
+		var gltfExporter = new THREE.GLTFExporter();
+		gltfExporter.parse( model, function( result ) {
+
+		var output = JSON.stringify( result, null, 2 );
+		console.log( output );
+		saveString( output, 'scene.glb' );
+
+		},null );
+
+		}
+
+		function saveString( text, filename ) {
+		save( new Blob( [ text ], { type: 'text/plain' } ), filename );
+        }
+			  
+        var link = document.createElement( 'a' );
+        link.style.display = 'none';
+        document.body.appendChild( link );
+
+		function save( blob, filename ) {
+			link.href = URL.createObjectURL( blob );
+			link.download = filename;
+			link.click();
+		}
+
+		function onClick() {
+
+			event.preventDefault();
+
+			mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+			mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+
+			raycaster.setFromCamera( mouse, camera );
+
+			
+			var intersects = raycaster.intersectObjects( objects , true );
+			
+			console.log( 'Intersection:', intersects +" "+ objects.length);
+			if ( intersects.length > 0 ) {
+
+			var clickedObject = intersects[0].object;
+
+			console.log( 'Intersection:', clickedObject.name );
+			console.log('objects name'+intersects[ 0 ].object.name);
+				for (var i = 0; i < intersects.length; i++) {
+				if(intersects[i].object.type != "LineSegments")
+				//console.log( 'Intersection:', intersects[i].object );
+              //  transformControls.attach(intersects[i].object);
+                break; //when intersect is mesh, then break
+		}
+	}
+
+}
+   var Update = function () {
+        requestAnimationFrame(Update);
+        renderer.render( scene, camera );
+        };
+
+       Update();
+
+    </script>
+</body>
+</html>

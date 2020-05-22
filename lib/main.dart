@@ -12,7 +12,8 @@ class HomePage extends StatelessWidget{
   Widget build(BuildContext context) {
     // TODO: implement build
     return MaterialApp(
-      title: "Infinity",
+      title: "Infinity Studio",
+        debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
         fontFamily: "Sourcesans"

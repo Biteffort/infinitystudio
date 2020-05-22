@@ -1,15 +1,22 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:math';
+import 'dart:typed_data';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:infinitystudio/Builder/CreatorBody.dart';
-import 'dart:convert';
+import 'dart:async';
 
+import 'package:http/http.dart' as http;
 import 'dart:js' as js;
 import 'dart:html' as html;
 
 import 'package:infinitystudio/Builder/CreatorNavigationbar.dart';
+import 'package:infinitystudio/Builder/episodes_list.dart';
 import 'package:toast/toast.dart';
 
 class CreatorPage extends StatefulWidget {
@@ -19,11 +26,103 @@ class CreatorPage extends StatefulWidget {
   }
 }
 
+
+List<IntSize> _createSizes(int count) {
+  Random rnd = new Random();
+  return new List.generate(count,
+          (i) => new IntSize((rnd.nextInt(500) + 200), rnd.nextInt(800) + 200));
+}
+
+final Uint8List kTransparentImage = new Uint8List.fromList(<int>[
+  0x89,
+  0x50,
+  0x4E,
+  0x47,
+  0x0D,
+  0x0A,
+  0x1A,
+  0x0A,
+  0x00,
+  0x00,
+  0x00,
+  0x0D,
+  0x49,
+  0x48,
+  0x44,
+  0x52,
+  0x00,
+  0x00,
+  0x00,
+  0x01,
+  0x00,
+  0x00,
+  0x00,
+  0x01,
+  0x08,
+  0x06,
+  0x00,
+  0x00,
+  0x00,
+  0x1F,
+  0x15,
+  0xC4,
+  0x89,
+  0x00,
+  0x00,
+  0x00,
+  0x0A,
+  0x49,
+  0x44,
+  0x41,
+  0x54,
+  0x78,
+  0x9C,
+  0x63,
+  0x00,
+  0x01,
+  0x00,
+  0x00,
+  0x05,
+  0x00,
+  0x01,
+  0x0D,
+  0x0A,
+  0x2D,
+  0xB4,
+  0x00,
+  0x00,
+  0x00,
+  0x00,
+  0x49,
+  0x45,
+  0x4E,
+  0x44,
+  0xAE,
+]);
+
+
+
 class _CreatorPage extends State<CreatorPage> {
   Timer _timer;
+  List<int> _selectedFile;
+  Uint8List _bytesData;
+  Color currentColor = Colors.white;
 
-  Color currentColor = Colors.pink;
+  ScrollController _scrollController = new ScrollController();
+
+  bool isloading = false;
+
+  List plugxrMarkers;
+
+  final List<IntSize> _sizes;
+
+
   void changeColor(Color color) => setState(() => currentColor = color);
+
+  List<PlugxrData> listMarkers = [];
+  _CreatorPage() : _sizes = _createSizes(_kItemCount).toList();
+  static const int _kItemCount = 1000;
+
 
 
 
@@ -38,6 +137,18 @@ class _CreatorPage extends State<CreatorPage> {
 
       });
     });
+
+
+    this.fetchmarkersData();
+
+
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        fetchmarkersData();
+      }
+    });
+
 
   }
 
@@ -216,7 +327,7 @@ class _CreatorPage extends State<CreatorPage> {
               child: Card(
                 color: Colors.white,
                 elevation: 5,
-                child: Column(
+                child: ListView(
                   children: <Widget>[
                     Container(
                       margin: EdgeInsets.all(5.0),
@@ -243,7 +354,35 @@ class _CreatorPage extends State<CreatorPage> {
                       ),
                       onPressed: (){
                         startWebFilePicker();
+
+                        //getFilePath();
                       },
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      child: SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.max,
+                            children: <Widget>[
+                              SizedBox(
+                                height: 50,
+                                child: Container(
+                                  alignment: Alignment.center,
+                                child: Text(
+                                  '3D Assets',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 25,
+                                  ),
+                                  softWrap: true,
+                                ),
+                                ),
+                              ),
+                              EpisodesList(),
+                            ],
+                          )),
                     ),
                   ],
                 ),
@@ -572,8 +711,8 @@ class _CreatorPage extends State<CreatorPage> {
                 child: const Text('Choose Texture Color'),
                 color: currentColor,
                 textColor: useWhiteForeground(currentColor)
-                    ? const Color(0xff000000)
-                    : const Color(0xffffffff),
+                    ? const Color(0xffffffff)
+                    : const Color(0xff000000),
               ),
               /*Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -640,10 +779,219 @@ class _CreatorPage extends State<CreatorPage> {
   startWebFilePicker() async {
     html.InputElement uploadInput = html.FileUploadInputElement();
     uploadInput.multiple = false;
+    uploadInput.accept = ".glb";
     uploadInput.draggable = true;
     uploadInput.click();
+
+
+
+    uploadInput.onChange.listen((e) {
+      final files = uploadInput.files;
+      final file = files[0];
+      final reader = new html.FileReader();
+
+
+      print(file.relativePath);
+
+      Toast.show("File"+file.name, context, duration: Toast.LENGTH_SHORT, gravity:  Toast.BOTTOM);
+
+      reader.readAsDataUrl(file);
+
+      Uint8List _bytesData =
+      Base64Decoder().convert(file.toString().split(",").last);
+      List<int> _selectedFile = _bytesData;
+
+
+      /*reader.onLoadEnd.listen((e) {
+        _handleResult(reader.result);
+      });
+      reader.readAsDataUrl(file);*/
+
+
+    });
+
+
+  }
+
+
+  void getFilePath() async {
+    try {
+      String filePath = await FilePicker.getFilePath(
+          type: FileType.image);
+      if (filePath == '') {
+        return;
+      }
+      print("Path: " + filePath);
+      setState(() {
+        Toast.show("File"+filePath, context, duration: Toast.LENGTH_SHORT, gravity:  Toast.BOTTOM);
+
+      });
+    } on PlatformException catch (e) {
+      print("Error picking file: " + e.toString());
+    }
+  }
+
+  void _handleResult(Object result) {
+    setState(() {
+      _bytesData = Base64Decoder().convert(result.toString().split(",").last);
+      _selectedFile = _bytesData;
+
+
+
+    });
+  }
+
+  Widget _buildList() {
+    return StaggeredGridView.countBuilder(
+      controller: _scrollController,
+      shrinkWrap: true,
+      physics: ScrollPhysics(),
+      primary: false,
+      padding: const EdgeInsets.all(12),
+      crossAxisCount: 4,
+      mainAxisSpacing: 2,
+      crossAxisSpacing: 2,
+      itemCount: listMarkers.length,
+      itemBuilder: (context, index) {
+        if (index == listMarkers.length) {
+          return _buildProgressIndicator();
+        }else{
+          return new _Tile(listMarkers[index], _sizes[index]);
+        }
+
+      },
+      staggeredTileBuilder: (index) => new StaggeredTile.fit(2),
+    );
+  }
+
+  Future<String> fetchmarkersData() async {
+
+
+    if (!isloading) {
+      setState(() {
+        isloading = true;
+      });
+    }
+
+
+    final response =
+    await http.get(Uri.encodeFull("https://apiservice.plugxr.com/api/v2/GetAllTargets/0"),headers: {"Accept" : "application/json"});
+
+    if(response.statusCode == 200){
+
+      var result = json.decode(response.body);
+      print("Plugxr Markers Data : "+result.toString());
+
+      plugxrMarkers = result["data"];
+
+
+      print("Markers : "+plugxrMarkers.toString());
+
+      setState(() {
+        isloading = false;
+        for(Map i in plugxrMarkers){
+          listMarkers.add(PlugxrData.fromJson(i));
+        }
+      });
+
+
+    }
+  }
+
+  Widget _buildProgressIndicator() {
+    return new Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: new Center(
+        child: new Opacity(
+          opacity: isloading ? 1.0 : 00,
+          child: new CircularProgressIndicator(),
+        ),
+      ),
+    );
+  }
+
+
+
+
+
+
+}
+
+class IntSize {
+  const IntSize(this.width, this.height);
+
+  final int width;
+  final int height;
+}
+
+class _Tile extends StatelessWidget {
+  const _Tile(this.plugxrMarker, this.size);
+
+  final IntSize size;
+  final PlugxrData plugxrMarker;
+
+  @override
+  Widget build(BuildContext context) {
+    return new Card(
+      elevation: 3.0,
+
+      child: ClipRRect(
+        borderRadius: BorderRadius.all(Radius.circular(5.0)),
+        child: Align(
+          child: Image.network(plugxrMarker.image,fit: BoxFit.cover),
+        ),
+      ),
+    );
   }
 
 }
 
+class PlugxrData {
+  int trackableId;
+  String targetId;
+  String projectName;
+  int viewsCount;
+  String image;
+  String thumbnail;
+  int width;
+  int height;
+  String createdDate;
+
+  PlugxrData(
+      {this.trackableId,
+        this.targetId,
+        this.projectName,
+        this.viewsCount,
+        this.image,
+        this.thumbnail,
+        this.width,
+        this.height,
+        this.createdDate});
+
+  PlugxrData.fromJson(Map<String, dynamic> json) {
+    trackableId = json['trackable_id'];
+    targetId = json['target_id'];
+    projectName = json['project_name'];
+    viewsCount = json['views_count'];
+    image = json['image'];
+    thumbnail = json['thumbnail'];
+    width = json['width'];
+    height = json['height'];
+    createdDate = json['created_date'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['trackable_id'] = this.trackableId;
+    data['target_id'] = this.targetId;
+    data['project_name'] = this.projectName;
+    data['views_count'] = this.viewsCount;
+    data['image'] = this.image;
+    data['thumbnail'] = this.thumbnail;
+    data['width'] = this.width;
+    data['height'] = this.height;
+    data['created_date'] = this.createdDate;
+    return data;
+  }
+}
 
