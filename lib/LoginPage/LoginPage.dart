@@ -2,9 +2,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:infinitystudio/Builder/creator.dart';
-import 'dart:js' as js;
-import 'dart:html' as html;
-import 'package:infinitystudio/main.dart';
+import 'package:infinitystudio/Projects/projectmain.dart';
 
 class LoginPage extends StatelessWidget{
 
@@ -116,7 +114,7 @@ class LoginPage extends StatelessWidget{
 
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => CreatorPage()),
+                        MaterialPageRoute(builder: (context) => ProjectMain()),
                       );
 
 

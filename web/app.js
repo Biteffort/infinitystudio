@@ -1,3 +1,10 @@
+
+// Get User selected 3D Model
+function 3dmodel(url){
+    console.log(url);
+}
+
+// Create Canvas
 function alertMessage(width,height) {
     //alert(text)
 console.log(width);

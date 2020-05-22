@@ -1,13 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:infinitystudio/Builder/creator.dart';
 import 'package:infinitystudio/Builder/episode_item_model.dart';
 import 'package:toast/toast.dart';
 import 'dart:js' as js;
 import 'dart:html' as html;
 
-class EpisodeItem extends StatelessWidget {
+class ProjectsItem extends StatelessWidget {
   final EpisodeItemModel model;
-  const EpisodeItem({
+  const ProjectsItem({
     Key key,
     this.model,
   }) : super(key: key);
@@ -52,16 +53,19 @@ class EpisodeItem extends StatelessWidget {
                     ),
                   ),
                   SizedBox(
-                    width: 60.0,
+                    width: 80.0,
                     height: 30.0,
                     child: MaterialButton(
                       color: Colors.white,
-                      child: Text('Use',style: TextStyle(color: Colors.pink),),
+                      child: Text('Create',style: TextStyle(color: Colors.pink),),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(35))
                       ),
                       onPressed: (){
-                        loadModel(model.url,context);
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => CreatorPage()),
+                        );
                       },
                     ),
                   ),
