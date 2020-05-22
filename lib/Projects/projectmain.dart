@@ -40,7 +40,7 @@ class _ProjectMain extends StatelessWidget{
             children: <Widget>[
               ProjectsNav(),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 50.0),
+                padding: const EdgeInsets.symmetric(horizontal: 40.0),
                 child: MyProjects(),
               ),
             ],

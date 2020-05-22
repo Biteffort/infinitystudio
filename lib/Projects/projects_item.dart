@@ -53,7 +53,7 @@ class ProjectsItem extends StatelessWidget {
                     ),
                   ),
                   SizedBox(
-                    width: 80.0,
+                    width: 85.0,
                     height: 30.0,
                     child: MaterialButton(
                       color: Colors.white,

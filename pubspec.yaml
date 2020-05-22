@@ -70,7 +70,10 @@ flutter:
   fonts:
   - family: Sourcesans
     fonts:
-      - asset: assets/fonts/SourceSansPro.ttf
+      - asset: assets/fonts/axima_bold.ttf
+        weight: 800
+      - asset: assets/fonts/axima_regular.ttf
+        weight: 400
   # To add assets to your application, add an assets section, like this:
 
 

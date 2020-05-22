@@ -22,25 +22,54 @@ class MyProjects extends StatelessWidget{
             ),
             Container(
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
 
+                  Container(
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        SizedBox(
+                          width: 50.0,
+                        ),
+
+                        Text("PROJECTS ",style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 60,
+                            color: Colors.black
+                        ),
+                        ),
+
+                        Padding(
+                          padding: EdgeInsets.only(left: 50.0,top: 8.0),
+                          child: Text("To keep connected with us please login with your personal \ninformation by email address and password",
+                            style: TextStyle(fontSize: 16.0,color: Colors.black,fontStyle: FontStyle.normal),
+                            textAlign: TextAlign.start,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
                   SizedBox(
-                    width: 50.0,
+                    width: 630,
                   ),
 
-                  Text("PROJECTS ",style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 60,
-                      color: Colors.black
-                  ),
-                  ),
-
-                  Padding(
-                    padding: EdgeInsets.only(left: 50.0,top: 5.0),
-                    child: Text("To keep connected with us please login with your personal \ninformation by email address and password",
-                      style: TextStyle(fontSize: 20.0,color: Colors.black,fontStyle: FontStyle.normal),
-                      textAlign: TextAlign.start,
+                  SizedBox(
+                    width: 140.0,
+                    height: 35.0,
+                    child: MaterialButton(
+                      color: Colors.white,
+                      child: Text('Create Project',style: TextStyle(color: Colors.pink),),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(35))
+                      ),
+                      onPressed: (){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => CreatorPage()),
+                        );
+                      },
                     ),
                   ),
                 ],
@@ -73,7 +102,7 @@ class MyProjects extends StatelessWidget{
         if(constraints.maxWidth>800){
           return Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: pageChildren(constraints.biggest.width/2,context),
+            children: pageChildren(constraints.biggest.width,context),
           );
         }else{
           return Column(
